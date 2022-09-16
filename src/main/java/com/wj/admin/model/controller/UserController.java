@@ -5,6 +5,7 @@ package com.wj.admin.model.controller;
 import com.wj.admin.model.service.UserService;
 import com.wj.admin.util.Result;
 import com.wj.admin.vo.RegisterVO;
+import com.wj.admin.vo.UserEditVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +46,34 @@ public class UserController {
 
         userService.register(registerVO);
         return Result.ok().msg("注册成功");
+    }
+
+    /**
+     * 修改用户
+     *
+     * @return
+     */
+    @ApiOperation("修改用户")
+    @ApiImplicitParam(value = "用户对象",name = "userEditVO",dataType = "UserEditVO")
+    @PostMapping("/edit")
+    public Result edit(@RequestBody UserEditVO userEditVO) {
+
+
+        userService.edit(userEditVO);
+        return Result.ok().msg("修改用户成功");
+    }
+
+    /**
+     * 删除用户
+     *
+     * @return
+     */
+    @ApiOperation("删除用户")
+    @ApiImplicitParam(value = "用户Id",name = "userId",dataType = "Integer")
+    @PostMapping("/del")
+    public Result del(Integer userId) {
+        userService.del(userId);
+        return Result.ok().msg("删除用户成功");
     }
 }
 

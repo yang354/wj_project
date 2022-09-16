@@ -10,6 +10,7 @@ import com.wj.admin.model.entity.User;
 import com.wj.admin.model.service.UserService;
 import com.wj.admin.util.ResultCode;
 import com.wj.admin.vo.RegisterVO;
+import com.wj.admin.vo.UserEditVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,5 +76,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("username",username);
         //返回查询记录
         return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public void edit(UserEditVO userEditVO) {
+        // TODO: 2022/9/16 需要编写编辑功能
+    }
+
+    @Override
+    public void del(Integer userId) {
+        // TODO: 2022/9/16 需要编写删除功能
     }
 }
