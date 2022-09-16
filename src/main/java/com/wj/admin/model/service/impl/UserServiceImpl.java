@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author yyyz
@@ -37,23 +37,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void register(RegisterVO registerVO) {
         //对象关键字段非空判断
-        if (ObjectUtils.isEmpty(registerVO.getPhone())){
-            throw new MyException(ResultCode.ERROR,"手机号为空");
+        if (ObjectUtils.isEmpty(registerVO.getPhone())) {
+            throw new MyException(ResultCode.ERROR, "手机号为空");
         }
-        if (ObjectUtils.isEmpty(registerVO.getPassword())){
-            throw new MyException(ResultCode.ERROR,"密码为空");
+        if (ObjectUtils.isEmpty(registerVO.getPassword())) {
+            throw new MyException(ResultCode.ERROR, "密码为空");
         }
-        if (ObjectUtils.isEmpty(registerVO.getUsername())){
-            throw new MyException(ResultCode.ERROR,"用户名为空");
+        if (ObjectUtils.isEmpty(registerVO.getUsername())) {
+            throw new MyException(ResultCode.ERROR, "用户名为空");
         }
         //查询手机号或用户名是否重复
         //使用这种还是出现可以注册通过
 //        QueryWrapper<User> wrapper = new QueryWrapper<>();
 //        wrapper.eq("phone",registerVO.getPhone()).or().eq("username",registerVO.getUsername());
 //        User user = baseMapper.selectOne(wrapper);
-        User user = baseMapper.selectUser(registerVO.getPhone(),registerVO.getUsername());
-        if (user != null){
-            throw new MyException(ResultCode.ERROR,"手机号或用户名已注册");
+        User user = baseMapper.selectUser(registerVO.getPhone(), registerVO.getUsername());
+        if (user != null) {
+            throw new MyException(ResultCode.ERROR, "手机号或用户名已注册");
         }
 
 
@@ -62,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String newPassword = passwordEncoder.encode(registerVO.getPassword());
         System.out.println(newPassword);
         User addUser = new User();
-        BeanUtils.copyProperties(registerVO,addUser);
+        BeanUtils.copyProperties(registerVO, addUser);
         addUser.setPassword(newPassword);
         addUser.setIsDelete(0);
         //添加
@@ -72,8 +72,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User findUserByUserName(String username) {
         //创建条件构造器
-        QueryWrapper<User> queryWrapper = new QueryWrapper<User>(); //用户名
-        queryWrapper.eq("username",username);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>(); //用户名
+        queryWrapper.eq("username", username);
         //返回查询记录
         return baseMapper.selectOne(queryWrapper);
     }
@@ -81,10 +81,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void edit(UserEditVO userEditVO) {
         // TODO: 2022/9/16 需要编写编辑功能
+        User user = new User();
+        BeanUtils.copyProperties(userEditVO, user);
+        int index = baseMapper.updateById(user);
+        if (index == 0) {
+            throw new MyException(ResultCode.ERROR, "编辑用户失败");
+        }
     }
 
     @Override
     public void del(Integer userId) {
         // TODO: 2022/9/16 需要编写删除功能
+        int index = baseMapper.deleteById(userId);
+        if (index == 0) {
+            throw new MyException(ResultCode.ERROR, "删除用户失败");
+        }
     }
 }
